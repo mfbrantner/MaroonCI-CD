@@ -1,0 +1,11 @@
+name: Testing
+on: [workflow_dispatch]
+
+jobs:
+  test:
+    if: ${{ 'cond1' == 'cond1' && 'cond2' == 'cond2' && 'cond3' == 'cond3' }}
+    runs-on: self-hosted
+    name: test-job
+    steps:
+      - name: test-step
+        run: echo "Test..."
