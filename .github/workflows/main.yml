@@ -223,51 +223,51 @@ jobs:
     # we do not want to deploy if we are doing a scheduled run
     # make sure that we are on the develop branch
     if: |
-     ${{
      github.ref_name               == 'develop'  && 
      github.event_name             != 'schedule' && 
      needs.build.result            == 'success'  && 
      needs.test.result             == 'success'  && 
      needs.upload-artifacts.result == 'success' 
-     }}
-     
+
     steps:
+      - name: skip-deployment
+        run: echo "Skip deployment."
 
-      # remove the WebGL directory so we do not accidentally publish it to steam
-      - name: Prepare deployment
-        run: rm -rf build/WebGL
+      # # remove the WebGL directory so we do not accidentally publish it to steam
+      # - name: Prepare deployment
+      #   run: rm -rf build/WebGL
 
-      # run steam-deploy
-      # requires steam account that has permissions to upload builds
-      # for the specified appId 
-      - name: Deploy
-        uses: game-ci/steam-deploy@v3
-        with:
-          # username of the steam account used to upload
-          username: ${{ secrets.STEAM_USERNAME }}
+      # # run steam-deploy
+      # # requires steam account that has permissions to upload builds
+      # # for the specified appId 
+      # - name: Deploy
+      #   uses: game-ci/steam-deploy@v3
+      #   with:
+      #     # username of the steam account used to upload
+      #     username: ${{ secrets.STEAM_USERNAME }}
 
-          # needed so we do not have to complete 2FA every time we deploy
-          # if the login fails, even though username and password have not changed
-          # it may be necessary to regenerate the config.vdf, 
-          # base64 encode it and update the STEAM_CONFIG_VDF github secret
-          # https://game.ci/docs/github/deployment/steam#3-add-github-secrets
-          configVdf: ${{ secrets.STEAM_CONFIG_VDF}}
+      #     # needed so we do not have to complete 2FA every time we deploy
+      #     # if the login fails, even though username and password have not changed
+      #     # it may be necessary to regenerate the config.vdf, 
+      #     # base64 encode it and update the STEAM_CONFIG_VDF github secret
+      #     # https://game.ci/docs/github/deployment/steam#3-add-github-secrets
+      #     configVdf: ${{ secrets.STEAM_CONFIG_VDF}}
 
-          # appId of the application we are uploading to build for
-          appId: ${{ secrets.STEAM_APP_ID }}
+      #     # appId of the application we are uploading to build for
+      #     appId: ${{ secrets.STEAM_APP_ID }}
 
-          # set build description to commit hash
-          buildDescription: CI/CD build ${{ github.sha }}
+      #     # set build description to commit hash
+      #     buildDescription: CI/CD build ${{ github.sha }}
 
-          # path where steampipe looks for the build
-          rootPath: build
+      #     # path where steampipe looks for the build
+      #     rootPath: build
 
-          # path for depot1, relative form rootPath
-          # we only have 1 depot, so . is sufficient
-          depot1Path: .
+      #     # path for depot1, relative form rootPath
+      #     # we only have 1 depot, so . is sufficient
+      #     depot1Path: .
 
-          # deploy to the development branch of the app
-          releaseBranch: development
+      #     # deploy to the development branch of the app
+      #     releaseBranch: development
 
 
   # this job is needed because in some instances, there might be some leftover files
