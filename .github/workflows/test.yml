@@ -13,12 +13,12 @@ jobs:
   test:
     needs: [dep]
     if: |
-      github.ref_name == 'main' && 
+      github.ref_name == 'develop' && 
       needs.dep.result == 'success' &&
       github.event_name == 'workflow_dispatch' &&
       'cond1' == 'cond1' && 
       'cond2' == 'cond2' && 
-      'cond3' == 'cond3'
+      'cond3' == 'false3'
     
 
     runs-on: self-hosted
