@@ -13,7 +13,7 @@ jobs:
   test:
     needs: [dep]
     if: |
-      github.ref_name == 'develop' && 
+      github.ref_name == 'main' && 
       needs.dep.result == 'success' &&
       github.event_name == 'workflow_dispatch' &&
       'cond1' == 'cond1' && 
