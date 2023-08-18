@@ -3,7 +3,11 @@ on: [workflow_dispatch]
 
 jobs:
   test:
-    if: ${{ 'cond1' == 'cond1' && 'cond2' == 'false2' && 'cond3' == 'cond3' }}
+    if: | 
+      ${{ 'cond1' == 'cond1' && 
+      'cond2' == 'false2' && 
+      'cond3' == 'cond3' }}
+      
     runs-on: self-hosted
     name: test-job
     steps:
