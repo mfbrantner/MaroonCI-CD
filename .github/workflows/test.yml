@@ -4,8 +4,9 @@ on: [workflow_dispatch]
 jobs:
   test:
     if: |
+      github.ref_name == 'develop'
       'cond1' == 'cond1' && 
-      'cond2' == 'false2' && 
+      'cond2' == 'cond2' && 
       'cond3' == 'cond3'
     
 
