@@ -105,7 +105,7 @@ jobs:
 
     steps:
       - name: Build
-        uses: game-ci/unity-builder@v4
+        uses: game-ci/unity-builder@v4.1.0
 
         # environment vars needed by unity-builder to activate the unity license
         # defined in the Actions Secrets in the repo settings
@@ -172,7 +172,7 @@ jobs:
           - editmode
     steps:
       - name: Test
-        uses: game-ci/unity-test-runner@v4
+        uses: game-ci/unity-test-runner@v4.1.0
         id: tests
         env:
           UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
@@ -200,10 +200,10 @@ jobs:
 
       # chown files to the user that was identified during setup
       # this is necessary because actions executed through docker have root:root permissions
-      - name: Restore file ownership
-        uses: peter-murray/reset-workspace-ownership-action@v1
-        with:
-          user_id: ${{ needs.setup.outputs.uid }}
+      #- name: Restore file ownership
+      #  uses: peter-murray/reset-workspace-ownership-action@v1
+      #  with:
+      #    user_id: ${{ needs.setup.outputs.uid }}
 
       # get rid of empty StandaloneWindows64 folder created by the build action
       # compress build folder for faster up- and download
