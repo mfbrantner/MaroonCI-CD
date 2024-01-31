@@ -105,7 +105,7 @@ jobs:
 
     steps:
       - name: Build
-        uses: game-ci/unity-builder@v4.1.0
+        uses: game-ci/unity-builder@v4.1.4
 
         # environment vars needed by unity-builder to activate the unity license
         # defined in the Actions Secrets in the repo settings
@@ -172,7 +172,7 @@ jobs:
           - editmode
     steps:
       - name: Test
-        uses: game-ci/unity-test-runner@v4.1.0
+        uses: game-ci/unity-test-runner@v4.1.1
         id: tests
         env:
           UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
