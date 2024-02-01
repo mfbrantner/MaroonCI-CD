@@ -60,7 +60,7 @@ jobs:
           echo $actions_user_id
           echo "uid=$actions_user_id" >> $GITHUB_OUTPUT 
 
-      - cursed_fix: cursed fix
+      - name: cursed fix
         run: |
           mkdir -p /tmp/.X11-unix
           chmod 1777 /tmp/.X11-unix
