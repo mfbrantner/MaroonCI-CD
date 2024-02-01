@@ -73,7 +73,7 @@ jobs:
       # if there has been a change: skip this step and save the cache later on
       - name: Restore Cache
         id: restore-cache
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         with:
           path: unity/Library
           key: Library-${{ hashFiles('unity/Assets/**', 'unity/Packages/**', 'unity/ProjectSettings/**') }}
@@ -149,7 +149,7 @@ jobs:
     if: needs.setup.outputs.hit != 'true'
     steps:
       - name: Save Cache
-        uses: actions/cache/save@v3
+        uses: actions/cache/save@v4
         with:
           path: unity/Library
           key: ${{ needs.setup.outputs.key }}
@@ -216,7 +216,7 @@ jobs:
       
       # upload build.zip and the test results
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MaroonArtifacts
           path: |
