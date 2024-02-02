@@ -104,6 +104,14 @@ jobs:
             maroonBuildTarget: WebGL
 
     steps:
+
+      # we want the repo to be in its original state before each build
+      - name: Restore Build Environment
+        shell: bash
+        run: |
+          git reset --hard
+
+
       - name: Build
         uses: game-ci/unity-builder@v4.1.4
 
@@ -125,18 +133,14 @@ jobs:
           buildName: ${{ matrix.maroonBuildTarget }}
           buildsPath: build
           # run as host user or default root container user, should fix most permission issues on self-hosted runners
-          #runAsHostUser: true
-          chownFilesTo: ${{ needs.setup.outputs.uid }}:${{ needs.setup.outputs.uid }}
+          runAsHostUser: true
+          #chownFilesTo: ${{ needs.setup.outputs.uid }}:${{ needs.setup.outputs.uid }}
 
           # if this is set to false, the job will fail if any file has changed since checkout
           # since it is set to true, it will only raise a warning
           allowDirtyBuild: true
           
-      # we want the repo to be in its original state before each build
-      - name: Restore Build Environment
-        shell: bash
-        run: |
-          git reset --hard
+
 
   # store the library folder in the cache
   # if the library folder has been retrieved from the cache during setup, this job is skipped
@@ -183,8 +187,8 @@ jobs:
           projectPath: ${{ matrix.projectPath }}
           testMode: ${{ matrix.testMode }}
           # run as host user or default root container user, should fix most permission issues on self-hosted runners
-          #runAsHostUser: true
-          chownFilesTo: ${{ needs.setup.outputs.uid }}:${{ needs.setup.outputs.uid }}
+          runAsHostUser: true
+          #chownFilesTo: ${{ needs.setup.outputs.uid }}:${{ needs.setup.outputs.uid }}
           # save test results to ./test-results/
           artifactsPath: ./test-results/${{ matrix.testMode }}-results
   
@@ -202,10 +206,10 @@ jobs:
 
       # chown files to the user that was identified during setup
       # this is necessary because actions executed through docker have root:root permissions
-      - name: Restore file ownership
-        uses: peter-murray/reset-workspace-ownership-action@v1
-        with:
-          user_id: ${{ needs.setup.outputs.uid }}
+      #- name: Restore file ownership
+      #  uses: peter-murray/reset-workspace-ownership-action@v1
+      #  with:
+      #    user_id: ${{ needs.setup.outputs.uid }}
 
       # get rid of empty StandaloneWindows64 folder created by the build action
       # compress build folder for faster up- and download
