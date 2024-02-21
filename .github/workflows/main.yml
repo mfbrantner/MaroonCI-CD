@@ -113,7 +113,7 @@ jobs:
 
 
       - name: Build
-        uses: game-ci/unity-builder@v4.1.4
+        uses: game-ci/unity-builder@v4.2.1
 
         # environment vars needed by unity-builder to activate the unity license
         # defined in the Actions Secrets in the repo settings
