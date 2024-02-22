@@ -64,7 +64,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       # try to restore Library folder from cache
       # by hashing all files in Assets/ Packages/ and ProjectSettins/
