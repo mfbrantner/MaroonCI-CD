@@ -101,13 +101,6 @@ jobs:
             maroonBuildTarget: WebGL
 
     steps:
-
-      # we want the repo to be in its original state before each build
-      - name: Restore Build Environment
-        shell: bash
-        run: |
-          git reset --hard
-          rm -rf unity/ProjectSettings/Packages/com.unity.services.core
  
       - name: Build
         uses: game-ci/unity-builder@v4.2.1
@@ -137,7 +130,12 @@ jobs:
           # since it is set to true, it will only raise a warning
           allowDirtyBuild: true
           
-
+      # we want the repo to be in its original state before each build
+      - name: Restore Build Environment
+        shell: bash
+        run: |
+          git reset --hard
+          rm -rf unity/ProjectSettings/Packages/com.unity.services.core
 
   # store the library folder in the cache
   # if the library folder has been retrieved from the cache during setup, this job is skipped
