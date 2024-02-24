@@ -26,6 +26,11 @@ on:
   # scheduled runs do not trigger deployment to steam
   schedule:
     - cron: 0 6 * * *
+    
+# prevent that more than 1 instance of a workflow from this group runs at any given time
+concurrency:
+  group: default
+  cancel-in-progress: false
 
 jobs:
 

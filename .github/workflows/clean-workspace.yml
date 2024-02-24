@@ -3,6 +3,12 @@ name: Clean up workspace
 
 on: [workflow_dispatch]
 
+# prevent that more than 1 instance of a workflow from this group runs at any given time
+concurrency:
+  group: default
+  cancel-in-progress: false
+
+
 jobs:
   cleanup:
     name: Cleanup
