@@ -57,6 +57,14 @@ jobs:
       uid: ${{ steps.get_uid.outputs.uid }}
 
     steps:
+      # retrieve uid of runner (needed later on)
+      - name: Get Actions user id
+        id: get_uid
+        run: |
+          actions_user_id=`id -u $USER`
+          echo $actions_user_id
+          echo "uid=$actions_user_id" >> $GITHUB_OUTPUT 
+
       # check out repo 
       - name: Checkout
         uses: actions/checkout@v4
@@ -123,7 +131,7 @@ jobs:
           buildName: ${{ matrix.maroonBuildTarget }}
           buildsPath: build
           # run as host user or default root container user, should fix most permission issues on self-hosted runners
-          runAsHostUser: true
+          # runAsHostUser: true
           #chownFilesTo: ${{ needs.setup.outputs.uid }}:${{ needs.setup.outputs.uid }}
 
           # if this is set to false, the job will fail if any file has changed since checkout
@@ -183,7 +191,7 @@ jobs:
           projectPath: ${{ matrix.projectPath }}
           testMode: ${{ matrix.testMode }}
           # run as host user or default root container user, should fix most permission issues on self-hosted runners
-          runAsHostUser: true
+          # runAsHostUser: true
           #chownFilesTo: ${{ needs.setup.outputs.uid }}:${{ needs.setup.outputs.uid }}
           # save test results to ./test-results/
           artifactsPath: ./test-results/${{ matrix.testMode }}-results
@@ -199,6 +207,14 @@ jobs:
     needs: [setup, build, test]
     if: ${{ success() || (needs.build.result == 'success' || needs.test.result == 'success') }}
     steps:
+
+      # chown files to the user that was identified during setup
+      # this is necessary because actions executed through docker have root:root permissions
+      - name: Restore file ownership
+        uses: peter-murray/reset-workspace-ownership-action@v1
+        with:
+          user_id: ${{ needs.setup.outputs.uid }}
+          
       # get rid of empty StandaloneWindows64 folder created by the build action
       # compress build folder for faster up- and download
       - name: Compress build folder
