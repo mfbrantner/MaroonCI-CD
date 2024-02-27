@@ -179,6 +179,7 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
+          customImage: 'mfbrantner/debug:v1'
           projectPath: ${{ matrix.projectPath }}
           testMode: ${{ matrix.testMode }}
           # run as host user or default root container user, should fix most permission issues on self-hosted runners
