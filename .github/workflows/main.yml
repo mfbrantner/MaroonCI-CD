@@ -132,7 +132,7 @@ jobs:
           buildsPath: build
           # run as host user or default root container user, should fix most permission issues on self-hosted runners
           # runAsHostUser: true
-          #chownFilesTo: ${{ needs.setup.outputs.uid }}:${{ needs.setup.outputs.uid }}
+          chownFilesTo: ${{ needs.setup.outputs.uid }}:${{ needs.setup.outputs.uid }}
 
           # if this is set to false, the job will fail if any file has changed since checkout
           # since it is set to true, it will only raise a warning
@@ -191,7 +191,7 @@ jobs:
           testMode: ${{ matrix.testMode }}
           # run as host user or default root container user, should fix most permission issues on self-hosted runners
           # runAsHostUser: true
-          #chownFilesTo: ${{ needs.setup.outputs.uid }}:${{ needs.setup.outputs.uid }}
+          chownFilesTo: ${{ needs.setup.outputs.uid }}:${{ needs.setup.outputs.uid }}
           # save test results to ./test-results/
           artifactsPath: ./test-results/${{ matrix.testMode }}-results
   
