@@ -143,7 +143,6 @@ jobs:
         shell: bash
         run: |
           git reset --hard
-          rm -rf unity/ProjectSettings/Packages/com.unity.services.core
 
   # store the library folder in the cache
   # if the library folder has been retrieved from the cache during setup, this job is skipped
@@ -214,7 +213,7 @@ jobs:
         uses: peter-murray/reset-workspace-ownership-action@v1
         with:
           user_id: ${{ needs.setup.outputs.uid }}
-          
+
       # get rid of empty StandaloneWindows64 folder created by the build action
       # compress build folder for faster up- and download
       - name: Compress build folder
