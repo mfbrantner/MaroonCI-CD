@@ -29,6 +29,9 @@ jobs:
 
     steps:
 
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+
       # Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
