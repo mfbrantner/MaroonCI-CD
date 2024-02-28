@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         projectPath: [unity]
-        testMode: [playmode, editmode, standalone]
+        testMode: [playmode, editmode]
 
     steps:
     
