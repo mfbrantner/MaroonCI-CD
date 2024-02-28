@@ -13,17 +13,19 @@ jobs:
       # if fail-fast is set to true, the job will abort if one of the builds fail
       fail-fast: false
       matrix:
-        projectPath: [unity]
         include:
           
           - targetPlatform: StandaloneWindows64
             maroonBuildTarget: PC
+            projectPath: unity
 
           - targetPlatform: StandaloneWindows64
             maroonBuildTarget: VR
+            projectPath: unity
 
           - targetPlatform: WebGL
             maroonBuildTarget: WebGL
+            projectPath: unity
 
     steps:
 
