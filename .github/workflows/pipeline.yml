@@ -80,6 +80,10 @@ jobs:
 
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
+        with:
+          docker-images: false
+          swap-space: false
+          large-packages: false
 
       # Checkout
       - name: Checkout repository
