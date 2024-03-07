@@ -52,8 +52,7 @@ jobs:
 
   build:
     name: Build for ${{ matrix.maroonBuildTarget }}
-    runs-on: self-hosted
-    # runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     outputs:
       buildVersion: ${{ steps.build.outputs.buildVersion }}
 
@@ -120,8 +119,7 @@ jobs:
           projectPath: ${{ matrix.projectPath }}
           buildName: ${{ matrix.maroonBuildTarget }}
           buildsPath: build
-          runAsHostUser: true
-
+          
       # Upload build
       - name: Upload build for ${{ matrix.maroonBuildTarget }}
         uses: actions/upload-artifact@v4
