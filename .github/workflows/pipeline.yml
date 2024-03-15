@@ -4,8 +4,9 @@ on: [workflow_dispatch]
 
 jobs:
 
+  # test job matrix
   test:
-    name: Test ${{ matrix.testMode }}
+    name: Run ${{ matrix.testMode }} tests
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -50,11 +51,11 @@ jobs:
           # if no files match the supplied path, fail job with error
           if-no-files-found: error
 
+  # build job matrix
   build:
     name: Build for ${{ matrix.maroonBuildTarget }}
     runs-on: ubuntu-latest
-    outputs:
-      buildVersion: ${{ steps.build.outputs.buildVersion }}
+
 
     # create job matrix
     # runs job once for each build target
@@ -63,7 +64,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          
           - targetPlatform: StandaloneWindows64
             maroonBuildTarget: PC
             projectPath: unity
@@ -76,13 +76,19 @@ jobs:
             maroonBuildTarget: WebGL
             projectPath: unity
 
+    # this step is needed because the free GitHub runners come with limited disk space
+    # the action deletes unused files, packages and dependencies that the GitHub runner provides
+    # more info:
+    # https://game.ci/docs/troubleshooting/common-issues#no-space-left-on-device
+    # https://github.com/marketplace/actions/free-disk-space-ubuntu
     steps:
-
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
         with:
+          # excluded because they might be needed
           docker-images: false
           swap-storage: false
+          # excluded since it takes a very long time to run
           large-packages: false
 
       # Checkout
@@ -129,7 +135,7 @@ jobs:
           # if no files match the supplied path, fail job with error
           if-no-files-found: error
 
-  # mock deploy job
+  # deploy build
   deploy:
     runs-on: ubuntu-latest
     needs: [test, build]
@@ -137,8 +143,21 @@ jobs:
       - name: Deploying build
         run: |
           echo "Deploying..."
-          echo "Build version: ${{ needs.build.outputs.buildVersion  }}"
+          mkdir build
           echo "Commit hash:   ${{ github.sha }}"
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: build-*
+          path: build/
+
+        
+      - name: Upload to Steam
+        run: |
+          ls -R
+      
+
 
   
   
