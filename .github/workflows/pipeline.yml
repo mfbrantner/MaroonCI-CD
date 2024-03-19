@@ -3,7 +3,9 @@ name: Pipeline
 on:
  # run workflow on push events on any branch
  # one can tell Actions to not run the pipeline 
- # by including [ci skip] or [no ci] in the commit message
+ # by including certain strings in the commit message
+ # e.g.: "[ci skip]", "[no ci]"
+ # https://docs.github.com/en/enterprise-cloud@latest/actions/managing-workflow-runs/skipping-workflow-runs
   push:
   
   # run workflow when a review for a PR is requested
@@ -19,11 +21,12 @@ on:
         required: false
         default: false
 
-  # run daily at 6am UTC
-  # idea: quickly spot issues with workflow/runner
+  # run daily at 5:50 AM UTC
+  # to quickly spot issues with workflow/runner
   # scheduled runs do not trigger deployment to steam
+  # (runs at 5:50 AM to avoid congestion at the start of the hour )
   schedule:
-    - cron: 0 6 * * *
+    - cron: 50 5 * * *
 
 
 jobs:
@@ -162,6 +165,8 @@ jobs:
   # deploy build
   deploy:
 
+    name: Deploy to Steam
+    
     # only deply if :
     # publish_to_steam is set to true (default is false)
     # the event happened on the development branch
@@ -174,15 +179,24 @@ jobs:
      github.event_name             != 'schedule' && 
      needs.build.result            == 'success'  && 
      needs.test.result             == 'success'
+    
+    # prevent that more than one deploy job runs at any given time
+    # https://docs.github.com/en/enterprise-cloud@latest/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idconcurrency
+    concurrency:
+      group: active-deployment
+      cancel-in-progress: false
 
     runs-on: ubuntu-latest
     needs: [test, build]
     steps:
+      
+      # download the build artifacts generated during the build job
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
           pattern: build-*
 
+      # create release/ dir and move the PC and the VR build inside
       - name: Preparing deployment
         run: |
           mkdir release
@@ -190,13 +204,32 @@ jobs:
           mv build-PC/PC release/PC
           mv build-VR/VR release/VR
 
-      # tbi        
-      - name: Upload to Steam
-        run: |
-          ls -R
-      
+      # deploy via SteamPipe
+      - name: Deploy to Steam
+        uses: game-ci/steam-deploy@v3
+        with:
+          # username of the steam account used to upload
+          username: ${{ secrets.STEAM_USERNAME }}
 
+          # needed so we do not have to complete 2FA every time we deploy
+          # if the login fails, even though username and password have not changed
+          # it may be necessary to regenerate the config.vdf, 
+          # base64 encode it and update the STEAM_CONFIG_VDF github secret
+          # https://game.ci/docs/github/deployment/steam#3-add-github-secrets
+          configVdf: ${{ secrets.STEAM_CONFIG_VDF}}
 
-  
-  
+          # appId of the application we are uploading to build for
+          appId: ${{ secrets.STEAM_APP_ID }}
 
+          # set build description to commit hash
+          buildDescription: CI/CD build ${{ github.sha }}
+
+          # path where SteamPipe looks for the build
+          rootPath: release
+
+          # path for depot1, relative form rootPath
+          # we only have 1 depot, so . is sufficient
+          depot1Path: .
+
+          # deploy to the development branch of the app
+          releaseBranch: development
