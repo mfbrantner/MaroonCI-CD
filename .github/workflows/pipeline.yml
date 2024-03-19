@@ -14,13 +14,7 @@ on:
     
   # allow to run the workflow manually
   workflow_dispatch:
-    inputs:
-      publish_to_steam:
-        type: boolean
-        description: 'Publish to Steam if build and test are successful'
-        required: false
-        default: false
-
+  
   # run daily at 5:50 AM UTC
   # to quickly spot issues with workflow/runner
   # scheduled runs do not trigger deployment to steam
@@ -168,13 +162,11 @@ jobs:
     name: Deploy to Steam
     
     # only deply if :
-    # publish_to_steam is set to true (default is false)
     # the event happened on the development branch
     # the event was not triggered by a schedule
     # the builds were successful
     # the tests were successful
     if: |
-     inputs.publish_to_steam       ==  true      &&
      github.ref_name               == 'develop'  && 
      github.event_name             != 'schedule' && 
      needs.build.result            == 'success'  && 
