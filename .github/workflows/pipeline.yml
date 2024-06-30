@@ -168,6 +168,7 @@ jobs:
     # the builds were successful
     # the tests were successful
     if: |
+     false &&
      github.ref_name               == 'develop'  && 
      github.event_name             != 'schedule' && 
      needs.build.result            == 'success'  && 
