@@ -159,6 +159,7 @@ jobs:
 
 
   analyze:
+    runs-on: ubuntu-latest
     name: Analyze & Publish Test Results
     permissions:
       checks: write
