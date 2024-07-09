@@ -159,6 +159,7 @@ jobs:
 
 
   analyze:
+    needs: [test]
     runs-on: ubuntu-latest
     name: Analyze & Publish Test Results
     permissions:
