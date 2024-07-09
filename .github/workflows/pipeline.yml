@@ -157,6 +157,19 @@ jobs:
           # if no files match the supplied path, fail job with error
           if-no-files-found: error
 
+
+  analyze:
+    name: Analyze & Publish Test Results
+    permissions:
+      checks: write
+    
+    steps:
+      - name: Analyze Test Results
+        if: ${{ always() }}
+        uses: rainbow-duck-games/unity-test-publisher@main
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+
   # deploy build
   deploy:
 
