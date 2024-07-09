@@ -31,6 +31,8 @@ jobs:
   test:
     name: Run ${{ matrix.testMode }} tests
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
     strategy:
       fail-fast: false
       matrix:
@@ -73,6 +75,15 @@ jobs:
           path: ${{ steps.tests.outputs.artifactsPath }}
           # if no files match the supplied path, fail job with error
           if-no-files-found: error
+
+      - name: Analyze & Publish test results
+        if: ${{ always() }}
+        uses: rainbow-duck-games/unity-test-publisher@main
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          reportPaths: ${{ steps.tests.outputs.artifactsPath }}/*.xml
+          checkName: ${{ matrix.testMode }}
+
 
   # build job matrix
   build:
