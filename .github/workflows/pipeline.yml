@@ -33,8 +33,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       checks: write
-      contents: read
-      actions: read
     strategy:
       fail-fast: false
       matrix:
@@ -67,7 +65,7 @@ jobs:
           testMode: ${{ matrix.testMode }}
           artifactsPath: test-${{ matrix.testMode }}-results
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          checkName: Test Results - ${{ matrix.testMode }}
+          checkName: "Test Results: ${{ matrix.testMode }}"
 
       # Upload results
       - name: Upload test results
