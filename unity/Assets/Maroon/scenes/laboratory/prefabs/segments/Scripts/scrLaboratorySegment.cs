@@ -123,7 +123,7 @@ public class scrLaboratorySegment : MonoBehaviour
             {
                 // Move closer by current distance per second
                 this.gameObject.transform.position -= this.gameObject.transform.forward * distance * Time.deltaTime;
-                yield return new WaitForEndOfFrame();
+                yield return  null;
             }
 
             // From 1m to 0.08m
@@ -131,7 +131,7 @@ public class scrLaboratorySegment : MonoBehaviour
             {
                 // Move closer by 1 meter per second
                 this.gameObject.transform.position -= this.gameObject.transform.forward * 1 * Time.deltaTime;
-                yield return new WaitForEndOfFrame();
+                yield return  null;
             }
 
             // If close enough to target location
