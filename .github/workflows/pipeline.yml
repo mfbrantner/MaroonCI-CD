@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Workflow run enqueued..."
-      - uses: ahmadnassri/action-workflow-queue@v1.2.0
+      - uses: mfbrantner/action-workflow-queue@master
         with:
           # try for 2h (7200000 ms)
           timeout: 7200000
