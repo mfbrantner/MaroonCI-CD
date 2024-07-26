@@ -18,19 +18,27 @@ on:
   schedule:
     - cron: 50 5 * * *
 
-# only allow one workflow to run at a time
-# this should prevent us from running out of unity license seats
-# should also prevent more than one steampipe upload running simultaneously 
-concurrency:
-  group: default
-  cancel-in-progress: false
-
 jobs:
+  queue:
+    name: Wait in queue
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Workflow run enqueued..."
+      - uses: ahmadnassri/action-workflow-queue@v1.2.0
+        with:
+          # try for 2h (7200000 ms)
+          timeout: 7200000
+          # check every 10s
+          delay: 10000
+      - run: echo "Workflow can continue now!"
+
 
   # test job matrix
   test:
     name: Run ${{ matrix.testMode }} tests
     runs-on: ubuntu-latest
+    needs: [queue]
+
     # needed to create status check
     permissions:
       checks: write
@@ -83,6 +91,7 @@ jobs:
   build:
     name: Build for ${{ matrix.maroonBuildTarget }}
     runs-on: ubuntu-latest
+    needs: [queue]
 
 
     # create job matrix
