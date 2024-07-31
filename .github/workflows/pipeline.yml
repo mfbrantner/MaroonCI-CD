@@ -24,14 +24,13 @@ jobs:
   wait-in-queue:
     name: Workflow queued
     runs-on: ubuntu-latest
-    permissions:
-      actions: read
     # wait for max 3h
     timeout-minutes: 180
     steps:
-      - uses: jsok/serialize-workflow-action@v1
+      - uses: softprops/turnstyle@v2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          same-branch-only: false
+
 
 
   # test job matrix
