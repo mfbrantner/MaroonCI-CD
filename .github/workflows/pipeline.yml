@@ -35,6 +35,9 @@ jobs:
 
   # test job matrix
   test:
+    concurrency:
+      group: tests
+      cancel-in-progress: false
     name: Run ${{ matrix.testMode }} tests
     runs-on: ubuntu-latest
     needs: [wait-in-queue]
@@ -91,7 +94,9 @@ jobs:
     name: Build for ${{ matrix.maroonBuildTarget }}
     runs-on: ubuntu-latest
     needs: [wait-in-queue]
-
+    concurrency:
+      group: builds
+      cancel-in-progress: false
     # create job matrix
     # runs job once for each build target
     strategy:
