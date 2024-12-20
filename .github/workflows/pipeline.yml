@@ -63,6 +63,7 @@ jobs:
           artifactsPath: test-${{ matrix.testMode }}-results
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           checkName: "Test Results: ${{ matrix.testMode }}"
+          customParameters: -runSynchronously
 
       # Upload results
       - name: Upload test results
