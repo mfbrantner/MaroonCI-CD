@@ -35,11 +35,11 @@ jobs:
         include: 
          - projectPath: unity
            testMode: playmode
-           params: "-job-worker-count value `nproc`"
+           params: "-job-worker-count 4"
 
          - projectPath: unity
            testMode: editmode
-           params: "-runSynchronously -job-worker-count value `nproc`"
+           params: "-runSynchronously -job-worker-count 4"
 
     steps:
     
@@ -147,7 +147,7 @@ jobs:
           # run the custom build script
           buildMethod: Maroon.Build.BuildPlayer.ActionsBuild
           # with these params:
-          customParameters: "-maroonBuildPath ../build -maroonBuildTarget ${{ matrix.maroonBuildTarget }} -job-worker-count value `nproc`"
+          customParameters: "-maroonBuildPath ../build -maroonBuildTarget ${{ matrix.maroonBuildTarget }} -job-worker-count 4"
           # we must specify a target platform, build path, build name and project path for unity-builder
           targetPlatform: ${{ matrix.targetPlatform }}
           projectPath: ${{ matrix.projectPath }}
